@@ -138,11 +138,28 @@ class HashTable:
         '''
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
-
-        Fill this in.
         '''
-        pass
+        # Double the capacity
+        capacity = self.capacity * 2
 
+        # New Table with Double capacity
+        new_table = HashTable(capacity)
+
+        # For each node in HashTable
+        for node in self.storage:
+
+            # Rehash key/value pair
+            key = node.key
+            value = node.value            
+
+            # Remove Current
+            self.remove(key)
+
+            # Add to the new table
+            new_table.insert(key, value)
+
+        # Return New Hash Table
+        return new_table
 
 
 if __name__ == "__main__":
