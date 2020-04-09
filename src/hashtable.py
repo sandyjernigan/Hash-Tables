@@ -65,6 +65,8 @@ class HashTable:
     def insert(self, key, value):
         ''' Store the value with the given key. '''
 
+        new_pair = LinkedPair(self, key, value)
+
         # Part 1: Hash collisions should be handled with an error warning. (Think about and
         # investigate the impact this will have on the tests)
 
@@ -73,6 +75,7 @@ class HashTable:
         # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
 
         # Use LinkedPair to add a new node
+
         pass
 
 
