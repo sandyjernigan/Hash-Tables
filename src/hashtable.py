@@ -62,9 +62,9 @@ class HashTable:
 
         # If bucket is empty
         if node is None:
+
             # Create the node
             self.storage[index] = newPair
-            # Exit Function
             return
 
         ''' Part 1: Hash collisions should be handled with an error warning. '''
@@ -73,11 +73,10 @@ class HashTable:
         while node is not None:
 
             ''' Part 2: Change this so that hash collisions are handled with Linked List Chaining. '''
-            # Go to the end of the List
+            # Add Node to end of the list
             prev = node
             node = node.next
         
-        # Add Node to end of the list
         prev.next = newPair
 
     def remove(self, key):
@@ -94,15 +93,16 @@ class HashTable:
 
         # Traverse the list, til node is None, or key is found
         while node is not None:
+            prev = node
 
             # Check if key matchs 
             if node.key == key:
 
+                #if node.next is not None:
+                    #prev.next = prev.next.next
+
                 # Delete the node
-                if prev is None:
-                    node = None
-                else:
-                    prev.next = prev.next.next
+                self.storage[index] = None
             
             # If not found, go to next
             node = node.next
@@ -122,8 +122,10 @@ class HashTable:
 
         # Traverse the list, til node is None, or key is found
         while node is not None:
-            # Check if key matchs 
+
+            # Check if key matches 
             if node.key == key:
+
                 # key found, return value
                 return node.value
             
@@ -140,28 +142,23 @@ class HashTable:
         rehash all key/value pairs.
         '''
         # Double the capacity
-        capacity = self.capacity * 2
+        self.capacity = self.capacity * 2
 
         # New Table with Double capacity
-        new_table = HashTable(capacity)
+        table = self.storage
+        self.storage = [None] * self.capacity
 
         # For each node in HashTable
-        for node in self.storage:
+        for node in table:
 
-            # Rehash key/value pair
-            key = node.key
-            value = node.value            
+            if node is not None:
 
-            # Remove Current
-            self.remove(key)
+                # Rehash key/value pair
+                key = node.key
+                value = node.value
 
-            # Add to the new table
-            new_table.insert(key, value)
-
-        # Return New Hash Table
-        self = new_table
-        return new_table
-
+                # Add to the new table
+                self.insert(key, value)
 
 if __name__ == "__main__":
     ht = HashTable(2)
