@@ -92,13 +92,26 @@ class HashTable:
 
 
     def retrieve(self, key):
-        # Retrieve the value stored with the given key.
-        # Returns None if the key is not found.
+        ''' Retrieve the value stored with the given key. '''
+        # Get the index using hash mod
+        index = self._hash_mod(key)
 
+        # Get Node for this index
+        node = self.storage[index]
+
+        # Traverse the list, til node is None, or key is found
+        while node is not None:
+            # Check if key matchs 
+            if node.key == self.key:
+                # key found, return value
+                return node.value
+            
+            # If not found, go to next
+            node = node.next
         
-
-        pass
-
+        ''' Returns None if the key is not found. '''
+        # If at end and key not found, return None
+        return None
 
     def resize(self):
         '''
