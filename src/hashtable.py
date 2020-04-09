@@ -159,6 +159,7 @@ class HashTable:
             new_table.insert(key, value)
 
         # Return New Hash Table
+        self = new_table
         return new_table
 
 
