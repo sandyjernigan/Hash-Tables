@@ -7,18 +7,6 @@ class LinkedPair:
         self.value = value
         self.next = None
 
-    def insert(self, key, value):
-        current_next = self.next
-        self.next = LinkedPair(value, self, key, current_next)
-        if current_next:
-            current_next.prev = self.next
-
-    def delete(self):
-        if self.prev:
-            self.prev.next = self.next
-        if self.next:
-            self.next.prev = self.prev
-
 class HashTable:
     '''
     A hash table that with `capacity` buckets
@@ -64,21 +52,33 @@ class HashTable:
 
     def insert(self, key, value):
         ''' Store the value with the given key. '''
+        newPair = LinkedPair(key, value)
 
-        new_pair = LinkedPair(self, key, value)
+        # Get the index using hash mod
+        index = self._hash_mod(key)
+        
+        # Node for this index
+        node = self.storage[index]
 
-        # Part 1: Hash collisions should be handled with an error warning. (Think about and
-        # investigate the impact this will have on the tests)
+        # If bucket is empty
+        if node is None:
+            # Create the node
+            self.storage[index] = newPair
+            # Exit Function
+            return
 
-        # Look to see if the is a value at the given key
+        ''' Part 1: Hash collisions should be handled with an error warning. '''
 
-        # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
+        # If node already exists
+        while node is not None:
 
-        # Use LinkedPair to add a new node
-
-        pass
-
-
+            ''' Part 2: Change this so that hash collisions are handled with Linked List Chaining. '''
+            # Go to the end of the List
+            prev = node
+            node = node.next
+        
+        # Add Node to end of the list
+        prev.next = newPair
 
     def remove(self, key):
         '''
@@ -92,13 +92,11 @@ class HashTable:
 
 
     def retrieve(self, key):
-        '''
-        Retrieve the value stored with the given key.
+        # Retrieve the value stored with the given key.
+        # Returns None if the key is not found.
 
-        Returns None if the key is not found.
+        
 
-        Fill this in.
-        '''
         pass
 
 
