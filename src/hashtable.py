@@ -81,15 +81,36 @@ class HashTable:
         prev.next = newPair
 
     def remove(self, key):
-        '''
-        Remove the value stored with the given key.
+        ''' Remove the value stored with the given key. '''
+        
+        # Get the index using hash mod
+        index = self._hash_mod(key)
+        
+        # Node for this index
+        node = self.storage[index]
 
-        Print a warning if the key is not found.
+        # Set initial point
+        prev = None
 
-        Fill this in.
-        '''
-        pass
+        # Traverse the list, til node is None, or key is found
+        while node is not None:
 
+            # Check if key matchs 
+            if node.key == key:
+
+                # Delete the node
+                if prev is None:
+                    node = None
+                else:
+                    prev.next = prev.next.next
+            
+            # If not found, go to next
+            node = node.next
+        
+        ''' Print a warning if the key is not found. '''
+        # If at end and key not found, print warning
+        print(f'Key not Found.')
+        return None
 
     def retrieve(self, key):
         ''' Retrieve the value stored with the given key. '''
@@ -102,7 +123,7 @@ class HashTable:
         # Traverse the list, til node is None, or key is found
         while node is not None:
             # Check if key matchs 
-            if node.key == self.key:
+            if node.key == key:
                 # key found, return value
                 return node.value
             
