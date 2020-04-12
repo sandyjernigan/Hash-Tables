@@ -68,12 +68,18 @@ class HashTable:
             return
 
         ''' Part 1: Hash collisions should be handled with an error warning. '''
-
         # If node already exists
         while node is not None:
 
+            # Check if key matchs
+            if node.key == key:
+
+                # replace value if key matches
+                self.storage[index] = newPair
+                return
+
             ''' Part 2: Change this so that hash collisions are handled with Linked List Chaining. '''
-            # Add Node to end of the list
+            # Otherwise, Add Node to end of the list
             prev = node
             node = node.next
         
@@ -98,11 +104,12 @@ class HashTable:
             # Check if key matchs 
             if node.key == key:
 
-                #if node.next is not None:
-                    #prev.next = prev.next.next
+                if node.next is not None:
+                    prev.next = prev.next.next
 
                 # Delete the node
                 self.storage[index] = None
+                return
             
             # If not found, go to next
             node = node.next
@@ -120,6 +127,10 @@ class HashTable:
         # Get Node for this index
         node = self.storage[index]
 
+        ''' Returns None if the key is not found. '''
+        if node is None:
+            return None
+
         # Traverse the list, til node is None, or key is found
         while node is not None:
 
@@ -131,9 +142,8 @@ class HashTable:
             
             # If not found, go to next
             node = node.next
-        
-        ''' Returns None if the key is not found. '''
-        # If at end and key not found, return None
+
+        ''' Returns None if the key is not found in the list. '''
         return None
 
     def resize(self):
@@ -141,24 +151,27 @@ class HashTable:
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
         '''
+        # Old Storage
+        old_storage = self.storage
+
         # Double the capacity
-        self.capacity = self.capacity * 2
+        self.capacity *= 2
 
         # New Table with Double capacity
-        table = self.storage
         self.storage = [None] * self.capacity
 
         # For each node in HashTable
-        for node in table:
+        for each in old_storage:
 
-            if node is not None:
+            # Check each node, if not None
+            node = each
+            while node is not None:
+            
+                # Rehash key/value pair and Insert into the new table
+                self.insert(node.key, node.value)
 
-                # Rehash key/value pair
-                key = node.key
-                value = node.value
-
-                # Add to the new table
-                self.insert(key, value)
+                # Check if there is a next node (list)
+                node = node.next
 
 if __name__ == "__main__":
     ht = HashTable(2)
