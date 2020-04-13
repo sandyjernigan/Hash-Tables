@@ -37,8 +37,8 @@ class HashTable:
         hash_value = 2020
 
         # Bit-shift and sum value for each character
-        for char in key:
-            hash_value = ((hash_value << 5) + hash_value) + char
+        for char in str(key):
+            hash_value = ((hash_value << 5) + hash_value) + ord(char)
         return hash_value
 
 
@@ -47,7 +47,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
-        return self._hash(key) % self.capacity
+        return self._hash_djb2(key) % self.capacity
 
 
     def insert(self, key, value):
