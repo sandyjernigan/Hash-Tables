@@ -23,6 +23,7 @@ class HashTable:
 
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
+
         return hash(key)
 
 
@@ -32,7 +33,13 @@ class HashTable:
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        pass
+        # Starter has value
+        hash_value = 2020
+
+        # Bit-shift and sum value for each character
+        for char in str(key):
+            hash_value = ((hash_value << 5) + hash_value) + ord(char)
+        return hash_value
 
 
     def _hash_mod(self, key):
@@ -40,56 +47,131 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
-        return self._hash(key) % self.capacity
+        return self._hash_djb2(key) % self.capacity
 
 
     def insert(self, key, value):
-        '''
-        Store the value with the given key.
+        ''' Store the value with the given key. '''
+        newPair = LinkedPair(key, value)
 
-        # Part 1: Hash collisions should be handled with an error warning. (Think about and
-        # investigate the impact this will have on the tests)
+        # Get the index using hash mod
+        index = self._hash_mod(key)
+        
+        # Node for this index
+        node = self.storage[index]
 
-        # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
+        # If bucket is empty
+        if node is None:
 
-        Fill this in.
-        '''
-        pass
+            # Create the node
+            self.storage[index] = newPair
+            return
 
+        ''' Part 1: Hash collisions should be handled with an error warning. '''
+        # If node already exists
+        while node is not None:
 
+            # Check if key matchs
+            if node.key == key:
+
+                # replace value if key matches
+                self.storage[index] = newPair
+                return
+
+            ''' Part 2: Change this so that hash collisions are handled with Linked List Chaining. '''
+            # Otherwise, Add Node to end of the list
+            prev = node
+            node = node.next
+        
+        prev.next = newPair
 
     def remove(self, key):
-        '''
-        Remove the value stored with the given key.
+        ''' Remove the value stored with the given key. '''
+        
+        # Get the index using hash mod
+        index = self._hash_mod(key)
+        
+        # Node for this index
+        node = self.storage[index]
 
-        Print a warning if the key is not found.
+        # Set initial point
+        prev = None
 
-        Fill this in.
-        '''
-        pass
+        # Traverse the list, til node is None, or key is found
+        while node is not None:
+            prev = node
 
+            # Check if key matchs 
+            if node.key == key:
+
+                if node.next is not None:
+                    prev.next = prev.next.next
+
+                # Delete the node
+                self.storage[index] = None
+                return
+            
+            # If not found, go to next
+            node = node.next
+        
+        ''' Print a warning if the key is not found. '''
+        # If at end and key not found, print warning
+        print(f'Key not Found.')
+        return None
 
     def retrieve(self, key):
-        '''
-        Retrieve the value stored with the given key.
+        ''' Retrieve the value stored with the given key. '''
+        # Get the index using hash mod
+        index = self._hash_mod(key)
 
-        Returns None if the key is not found.
+        # Get Node for this index
+        node = self.storage[index]
 
-        Fill this in.
-        '''
-        pass
+        ''' Returns None if the key is not found. '''
+        if node is None:
+            return None
 
+        # Traverse the list, til node is None, or key is found
+        while node is not None:
+
+            # Check if key matches 
+            if node.key == key:
+
+                # key found, return value
+                return node.value
+            
+            # If not found, go to next
+            node = node.next
+
+        ''' Returns None if the key is not found in the list. '''
+        return None
 
     def resize(self):
         '''
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
-
-        Fill this in.
         '''
-        pass
+        # Old Storage
+        old_storage = self.storage
 
+        # Double the capacity
+        self.capacity *= 2
 
+        # New Table with Double capacity
+        self.storage = [None] * self.capacity
+
+        # For each node in HashTable
+        for each in old_storage:
+
+            # Check each node, if not None
+            node = each
+            while node is not None:
+            
+                # Rehash key/value pair and Insert into the new table
+                self.insert(node.key, node.value)
+
+                # Check if there is a next node (list)
+                node = node.next
 
 if __name__ == "__main__":
     ht = HashTable(2)
